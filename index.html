@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Cho Bé 🎮</title>
+
+<style>
+* { box-sizing: border-box; user-select: none; margin: 0; padding: 0; }
+
+/* ================== VIDEO INTRO FULLSCREEN ================== */
+#videoIntro {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+#videoIntro video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Quan trọng: làm video phủ đầy màn hình */
+}
+
+body {
+    margin: 0;
+    font-family: "Comic Sans MS", cursive;
+    background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ===== CHUNG ===== */
+.hidden { display: none; }
+
+button {
+    padding: 10px 22px;
+    font-size: 18px;
+    border: none;
+    border-radius: 12px;
+    background: #ff9800;
+    color: white;
+    cursor: pointer;
+    margin-top: 12px;
+}
+
+/* ================== TRÒ 1 ================== */
+.game-wrapper {
+    max-width: 420px;
+    width: 100%;
+    padding: 12px;
+    text-align: center;
+}
+
+h1 {
+    color: #FF6F00;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.image-container {
+    background: white;
+    padding: 10px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    max-width: 200px;
+    margin: 20px auto;
+}
+
+.image-container img {
+    width: 100%;
+    border-radius: 16px;
+}
+
+.question {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #1565C0;
+    margin: 12px 0;
+}
+
+.options {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.option {
+    background: #FFF176;
+    font-size: 2.2em;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#message1 {
+    min-height: 60px;
+    font-size: 1.5em;
+    margin-top: 10px;
+}
+
+.correct { color: #2E7D32; }
+
+/* ================== TRÒ 2 ================== */
+.game {
+    max-width: 900px;
+    width: 100%;
+    padding: 16px;
+    text-align: center;
+}
+
+.top-row,
+.bottom-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 10px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.apple-img {
+    width: 100%;
+    max-width: 120px;
+    cursor: grab;
+}
+
+.basket {
+    border: 3px dashed #ff9800;
+    border-radius: 16px;
+    padding: 12px;
+    background: #fff8e1;
+    min-height: 130px;
+    font-size: 42px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.correct-basket {
+    border-color: #4caf50;
+    background: #e8f5e9;
+}
+
+/* POPUP */
+.message {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.message-box {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    max-width: 90%;
+}
+
+/* ================= MOBILE FIX ==================== */
+@media (max-width: 600px) {
+    h1 { font-size: 1.6em; }
+
+    .game { padding: 10px; }
+
+    .top-row, .bottom-row { gap: 8px; }
+
+    .card { padding: 6px; }
+
+    .apple-img { max-width: 90px; }
+
+    .basket {
+        min-height: 100px;
+        font-size: 32px;
+        padding: 8px;
+    }
+
+    .option {
+        width: 64px;
+        height: 64px;
+        font-size: 1.8em;
+    }
+
+    button {
+        font-size: 16px;
+        padding: 8px 16px;
+    }
+
+    .message-box { padding: 20px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================== VIDEO INTRO FULLSCREEN ================== -->
+<div id="videoIntro">
+    <video id="introVideo" autoplay muted playsinline controls>
+        <source src="video/video.mp4" type="video/mp4">
+        Trình duyệt của bạn không hỗ trợ video.
+    </video>
+</div>
+
+<!-- ================== TRÒ 1 ================== -->
+<div id="game1" class="game-wrapper hidden">
+    <h1>🐝 Bé Đếm Con Ong</h1>
+
+    <div class="image-container">
+        <img src="img/img.png" alt="Hình ong">
+    </div>
+
+    <div class="question">Có bao nhiêu con ong?</div>
+
+    <div class="options">
+        <div class="option" data-answer="1">1</div>
+        <div class="option" data-answer="2">2</div>
+        <div class="option" data-answer="3">3</div>
+    </div>
+
+    <div id="message1"></div>
+    <button id="nextGame" class="hidden">➡️ Chơi trò tiếp theo</button>
+</div>
+
+<!-- ================== TRÒ 2 ================== -->
+<div id="game2" class="game hidden">
+    <h1>🍎 Kéo Táo Vào Giỏ 🍎</h1>
+
+    <div class="top-row">
+        <div class="card"><img src="img/two.jpg" class="apple-img" draggable="true" data-count="2"></div>
+        <div class="card"><img src="img/one.jpg" class="apple-img" draggable="true" data-count="1"></div>
+        <div class="card"><img src="img/there.jpg" class="apple-img" draggable="true" data-count="3"></div>
+    </div>
+
+    <div class="bottom-row">
+        <div class="basket" data-need="1">
+            <div>🧺</div>
+            <div>•</div>
+        </div>
+        <div class="basket" data-need="2">
+            <div>🧺</div>
+            <div>• •</div>
+        </div>
+        <div class="basket" data-need="3">
+            <div>🧺</div>
+            <div>• • •</div>
+        </div>
+    </div>
+</div>
+
+<!-- POPUP HOÀN THÀNH -->
+<div class="message" id="finishPopup">
+    <div class="message-box">
+        <h2>🎉 Chúc mừng bé!</h2>
+        <p>Bé đã hoàn thành tất cả trò chơi rồi! Giỏi quá đi! 🌟</p>
+        <button onclick="location.reload()">🔄 Chơi lại từ đầu</button>
+    </div>
+</div>
+
+<script>
+// Khi video kết thúc → ẩn intro, hiện trò chơi 1
+document.getElementById('introVideo').addEventListener('ended', () => {
+    document.getElementById('videoIntro').style.display = 'none';
+    document.getElementById('game1').classList.remove('hidden');
+});
+
+/* ===== TRÒ 1: ĐẾM ONG ===== */
+const correctAnswer = 3;
+const msg1 = document.getElementById("message1");
+const nextBtn = document.getElementById("nextGame");
+
+document.querySelectorAll(".option").forEach(option => {
+    option.onclick = () => {
+        if (parseInt(option.dataset.answer) === correctAnswer) {
+            msg1.innerHTML = "<span class='correct'>🌟 Giỏi lắm! Đúng rồi bé ơi!</span>";
+            nextBtn.classList.remove("hidden");
+        } else {
+            msg1.innerHTML = "😅 Sai rồi, đếm lại nào bé!";
+        }
+    };
+});
+
+nextBtn.onclick = () => {
+    document.getElementById("game1").classList.add("hidden");
+    document.getElementById("game2").classList.remove("hidden");
+};
+
+/* ===== TRÒ 2: KÉO TÁO VÀO GIỎ ===== */
+let draggedImg = null;
+let done = 0;
+
+document.querySelectorAll(".apple-img").forEach(img => {
+    img.addEventListener("dragstart", e => {
+        draggedImg = img;
+    });
+});
+
+document.querySelectorAll(".basket").forEach(basket => {
+    const need = basket.dataset.need;
+
+    basket.addEventListener("dragover", e => e.preventDefault());
+    basket.addEventListener("drop", e => {
+        if (!draggedImg) return;
+        if (basket.classList.contains("correct-basket")) return;
+
+        if (draggedImg.dataset.count === need) {
+            basket.classList.add("correct-basket");
+
+            const clone = draggedImg.cloneNode(true);
+            clone.style.maxWidth = "80px";
+            clone.style.cursor = "default";
+            clone.removeAttribute("draggable");
+            basket.appendChild(clone);
+
+            draggedImg.style.visibility = "hidden";
+
+            done++;
+            if (done === 3) {
+                setTimeout(() => {
+                    document.getElementById("finishPopup").style.display = "flex";
+                }, 500);
+            }
+        }
+    });
+});
+</script>
+
+</body>
+</html>
