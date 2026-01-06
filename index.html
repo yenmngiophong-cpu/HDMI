@@ -29,7 +29,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Quan trọng: làm video phủ đầy màn hình */
+    object-fit: cover;
 }
 
 body {
@@ -149,6 +149,7 @@ h1 {
     width: 100%;
     max-width: 120px;
     cursor: grab;
+    touch-action: none; /* Quan trọng: hỗ trợ kéo trên mobile */
 }
 
 .basket {
@@ -288,6 +289,9 @@ h1 {
         <button onclick="location.reload()">🔄 Chơi lại từ đầu</button>
     </div>
 </div>
+
+<!-- Polyfill hỗ trợ kéo thả trên mobile -->
+<script src="https://bernardo-castilho.github.io/DragDropTouch/DragDropTouch.js"></script>
 
 <script>
 // Khi video kết thúc → ẩn intro, hiện trò chơi 1
